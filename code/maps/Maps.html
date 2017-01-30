@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+        "HTMLFiles/xhtml-math11-f.dtd">
+
+<!-- Created with the Wolfram Language : www.wolfram.com -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>
+  Untitled
+ </title>
+ <link href="HTMLFiles/Maps.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<p class="Title">
+ Maps Developer&rsquo;s Notebook
+</p>
+
+
+
+<p class="Text">
+ Working through ideas for abstractions of computation and what is theoretically possible given size limitations. Starting off with maps of binary strings of length n to m as abstraction of algorithm. Since any data structure (ex. trees) can be encoded into a string, this is pretty general. A complete index requires length <span><span><img src="HTMLFiles/Maps_1.png" alt="Maps_1.png" width="37" height="17" style="vertical-align:middle" /></span></span>, and records the entire behaviour of the map, right in the name! Still, it compresses the space of maps, <span><span><img src="HTMLFiles/Maps_2.png" alt="Maps_2.png" width="34" height="21" style="vertical-align:middle" /></span></span>, by <span><span><img src="HTMLFiles/Maps_3.png" alt="Maps_3.png" width="26" height="19" style="vertical-align:middle" /></span></span>. There are <span><span><img src="HTMLFiles/Maps_4.png" alt="Maps_4.png" width="28" height="18" style="vertical-align:middle" /></span></span> 3-3 maps. The question is: how many of those are unique? If there is not huge degeneracy, we must be missing out on the computational behaviour possible with little work, the space of unexplored algorithms.&nbsp;&nbsp;&nbsp;A function evaluating an arbitrary indexed map: (try 2-2, 256 possible)
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Maps_5.png" alt="Maps_5.png" width="682" height="39" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ mapGen makes the lookup table for a particular map from the index. The padding makes sure it works for smaller indices. Look up by selecting the index of the list corresponding to the integer form of the input sequence. Imagine: <span style='font-weight: bold;'>put the right number into this function and it will give you the solution to every traveling salesman problem of a certain size</span>. Maps are at one extreme of the continuum between memory and processing. No processing required except lookup, but also barely any compression. This suggests a trade-off between compression and processing, as though processing is just decompression. Below: first 10 2-2 maps
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Maps_6.gif" alt="Maps_6.gif" width="820" height="39" style="vertical-align:middle" />
+</p>
+
+<table class='Output'>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_7.gif" alt="Maps_7.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_8.gif" alt="Maps_8.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_9.gif" alt="Maps_9.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_10.gif" alt="Maps_10.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_11.gif" alt="Maps_11.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_12.gif" alt="Maps_12.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_13.gif" alt="Maps_13.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_14.gif" alt="Maps_14.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_15.gif" alt="Maps_15.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_16.gif" alt="Maps_16.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_17.gif" alt="Maps_17.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_18.gif" alt="Maps_18.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_19.gif" alt="Maps_19.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_20.gif" alt="Maps_20.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_21.gif" alt="Maps_21.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_22.gif" alt="Maps_22.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_23.gif" alt="Maps_23.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_24.gif" alt="Maps_24.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_25.gif" alt="Maps_25.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_26.gif" alt="Maps_26.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_27.gif" alt="Maps_27.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_28.gif" alt="Maps_28.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_29.gif" alt="Maps_29.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_30.gif" alt="Maps_30.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_31.gif" alt="Maps_31.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_32.gif" alt="Maps_32.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_33.gif" alt="Maps_33.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_34.gif" alt="Maps_34.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_35.gif" alt="Maps_35.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_36.gif" alt="Maps_36.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_37.gif" alt="Maps_37.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_38.gif" alt="Maps_38.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_39.gif" alt="Maps_39.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_40.gif" alt="Maps_40.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_41.gif" alt="Maps_41.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_42.gif" alt="Maps_42.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_43.gif" alt="Maps_43.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_44.gif" alt="Maps_44.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_45.gif" alt="Maps_45.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_46.gif" alt="Maps_46.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_47.gif" alt="Maps_47.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_48.gif" alt="Maps_48.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_49.gif" alt="Maps_49.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+  <td style='text-align: center;'><span><img src="HTMLFiles/Maps_50.gif" alt="Maps_50.gif" width="360" height="359" style="vertical-align:middle" /></span></td>
+ </tr>
+</table>
+
+<p class="Text">
+ Next ideas: I haven&rsquo;t even begun to explore composing maps, or dynamics of repeated maps... so much is possible! Are there prime numbers of maps, those which in composition give rise to others (specifically for n-n maps)? Also there is the question of what is or isn&rsquo;t possible to compute given certain size restrictions (Turing Universality is stupid if you need infinite memory).
+</p>
+
+
+
+
+
+
+<div style="font-family:Helvetica; font-size:11px; width:100%; border:1px none #999999; border-top-style:solid; padding-top:2px; margin-top:20px;">
+ <a href="http://www.wolfram.com/language/" style="color:#000; text-decoration:none;">
+  <span style="color:#555555">Created with the Wolfram Language</span> 
+ </a>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+        "HTMLFiles/xhtml-math11-f.dtd">
+
+<!-- Created with the Wolfram Language : www.wolfram.com -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>
+  Untitled
+ </title>
+ <link href="HTMLFiles/Errors.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<p class="Section">
+ Error Propagation Developer&rsquo;s Notebook
+</p>
+
+
+
+<p class="Text">
+ Short Story: &ldquo;err[q_, sig_] := Plus@@Map[(err[#]*D[q@@sig,#])^2&amp;,sig]//Sqrt&rdquo; is nice code for Gaussian error propagation (Wolfram Language doesn&rsquo;t have it inbuilt for some reason; the Variance function doesn&rsquo;t really work for simple experimental stuff), given any mathematical function, and its list of arguments. This is better than doing error propagation at every step; just roll your whole calculation into a function. Below: my notebook and the development and testing.<br /><br />I&rsquo;m using the Hall Effect to determine properties of a semiconductor like conductivity and carrier mobility. I will start by:<br />1. calibrating the measurement devices and saving those values. <br />2. Then I will check the I-V properties.<br />3. Finally I check the voltage saturation profile for a specific temperature. To do this I need a continuous stream of data. Hopefully there is a way of connecting the multimeter to the computer. Once I&rsquo;ve got that data stream, I&rsquo;ll import it into Mathematica and fit it. Is it possible to do that in real time? Real time visualization would allow me to interpret the data while taking it, so I could fix problems immediately. This is doable with Dynamic and ScheduleTask. <br />4. Measuring approximate sample thickness with a caliper.<br />5. Test light and wind effects on voltage and temperature.<br />Once these are done, I&rsquo;ll have a better sense of my measurements&rsquo; accuracy. Then I will do another temperature-resistance profile. Based on the profile I&rsquo;ll pick an appropriate temperature to do an in-depth measurement (all configurations) to get the resistivity. Then a Hall effect measurement (all configurations) at that temperature to get mobility. Then for one configuration do a temperature-resistance profile to get mobility-temperature characteristic.
+</p>
+
+
+
+<p class="Text">
+ First I need to write code that does the uncertainty propagation. I&rsquo;ll define a datum function that acts as a type, with systemic and random uncertainty separate. Gaussian propagation is the standard, but one should verify that the random uncertainty has such a distribution. The other is to take means with several data points, then it&rsquo;s guaranteed. What about systemic uncertainty? How should that be propagated? What sort of distribution does it have?
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_1.png" alt="Errors_1.png" width="49" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_2.png" alt="Errors_2.png" width="27" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_3.png" alt="Errors_3.png" width="46" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_4.png" alt="Errors_4.png" width="7" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_5.png" alt="Errors_5.png" width="28" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_6.png" alt="Errors_6.png" width="62" height="16" style="vertical-align:middle" />
+</p>
+
+<p class='Input' style='font-size: 12px;'>
+ <img src="HTMLFiles/Errors_7.png" alt="Errors_7.png" width="116" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_8.png" alt="Errors_8.png" width="281" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ I want to extract the arguments from an arbitrary formula q.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_9.png" alt="Errors_9.png" width="85" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_10.png" alt="Errors_10.png" width="23" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_11.png" alt="Errors_11.png" width="148" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Message">
+ <img src="HTMLFiles/Errors_12.png" alt="Errors_12.png" width="197" height="16" style="vertical-align:middle;" usemap="#map_12" />
+<map name="map_12">
+<area shape="rect" coords="0,15,20,1" title="Dynamic[RawBoxes[FEPrivate`FrontEndResource[FEStrings, messageMenuTooltip]]]" nohref="" />
+</map>
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_13.png" alt="Errors_13.png" width="114" height="19" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ So it&rsquo;s not easy. Actually recast q as a function.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_14.png" alt="Errors_14.png" width="177" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_15.png" alt="Errors_15.png" width="27" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_16.png" alt="Errors_16.png" width="49" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_17.png" alt="Errors_17.png" width="7" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_18.png" alt="Errors_18.png" width="159" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_19.png" alt="Errors_19.png" width="7" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_20.png" alt="Errors_20.png" width="16" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Print">
+ <a id="Info273687803470-1765572"></a>
+ Global`q
+</p>
+
+
+
+<table class='Print'>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: left;'><table class='Inline'>
+ <tr style='vertical-align: baseline;'>
+  <td style='text-align: left;'><span>q[x_,y_]=x+y</span></td>
+ </tr>
+</table>
+
+</td>
+ </tr>
+</table>
+
+<p class="Text">
+ I want to be elegant. I am determined to be elegant! The formula is: <span><span><img src="HTMLFiles/Errors_21.png" alt="Errors_21.png" width="156" height="58" style="vertical-align:middle" /></span></span>. That&rsquo;s what I need to implement for an arbitrary function. Just get the arguments using Part. Iterate over the arguments, using Fold?
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_22.png" alt="Errors_22.png" width="498" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_23.png" alt="Errors_23.png" width="179" height="47" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_24.png" alt="Errors_24.png" width="481" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_25.png" alt="Errors_25.png" width="153" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_26.png" alt="Errors_26.png" width="78" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_27.png" alt="Errors_27.png" width="1160" height="139" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_28.png" alt="Errors_28.png" width="66" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_29.png" alt="Errors_29.png" width="39" height="17" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ That works marginally well. Now I need to generalize the number of arguments. I somehow need to get the signature. Can I assume that I know it? I think so.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_30.png" alt="Errors_30.png" width="497" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ But I would like it to work equally for functions and data points. I can just add another rule in for data. Awesome.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_31.png" alt="Errors_31.png" width="72" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_32.png" alt="Errors_32.png" width="43" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_33.png" alt="Errors_33.png" width="43" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_34.png" alt="Errors_34.png" width="99" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_35.png" alt="Errors_35.png" width="179" height="24" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Great. Now some other functions.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_36.png" alt="Errors_36.png" width="213" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_37.png" alt="Errors_37.png" width="215" height="24" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_38.png" alt="Errors_38.png" width="146" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_39.png" alt="Errors_39.png" width="159" height="24" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Seems right to me. But there&rsquo;s probably a better way. Given sig, the folding seems unnecessary.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_40.png" alt="Errors_40.png" width="480" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_41.png" alt="Errors_41.png" width="91" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_42.png" alt="Errors_42.png" width="27" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Or even better, multiple definitions! I can&rsquo;t believe I didn&rsquo;t think of it before!
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_43.png" alt="Errors_43.png" width="269" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_44.png" alt="Errors_44.png" width="119" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_45.png" alt="Errors_45.png" width="65" height="24" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Nope this doesn&rsquo;t work for several reasons. Stick with the earlier one, but no folding. I could also do form err[q_[sig_]], but I&rsquo;ll leave that.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_46.png" alt="Errors_46.png" width="152" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_47.png" alt="Errors_47.png" width="7" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_48.png" alt="Errors_48.png" width="49" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_49.png" alt="Errors_49.png" width="7" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Weirdly enough, that seems correct! The error in the derivative would be zero, which is weird.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_50.png" alt="Errors_50.png" width="97" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_51.png" alt="Errors_51.png" width="89" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Unfortunately the in-built Variance function doesn&rsquo;t compute symbolic variance of the parts.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_52.png" alt="Errors_52.png" width="199" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_53.png" alt="Errors_53.png" width="99" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_54.png" alt="Errors_54.png" width="244" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_55.png" alt="Errors_55.png" width="13" height="17" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_56.png" alt="Errors_56.png" width="345" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_57.png" alt="Errors_57.png" width="33" height="17" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_58.png" alt="Errors_58.png" width="668" height="36" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_59.png" alt="Errors_59.png" width="767" height="19" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_60.png" alt="Errors_60.png" width="119" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_61.png" alt="Errors_61.png" width="471" height="19" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_62.png" alt="Errors_62.png" width="336" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_63.gif" alt="Errors_63.gif" width="380" height="163" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ That&rsquo;s another method for getting the standard deviation, but it&rsquo;s got a different result. Also depends on the value of x and y.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_64.png" alt="Errors_64.png" width="180" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_65.png" alt="Errors_65.png" width="179" height="24" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_66.png" alt="Errors_66.png" width="169" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_67.png" alt="Errors_67.png" width="295" height="19" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_68.png" alt="Errors_68.png" width="400" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_69.gif" alt="Errors_69.gif" width="417" height="238" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ So the two are equivalent for small values, and as the become a larger percentage of the mean they diverge. They are pretty good up to 20% of the mean, though. So within 5% there&rsquo;s absolutely no problem using the simpler one. Of course that&rsquo;s for just one function I tried.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_70.png" alt="Errors_70.png" width="430" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Since magnetic field strength is unknown, start with resistivity. Begin with undoped Germanium. Directly enter voltage and current to get resistances. Then put them through der Pauw eqn. Then fit to supplied theoretical equation.
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_71.gif" alt="Errors_71.gif" width="1776" height="304" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_72.png" alt="Errors_72.png" width="29" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_73.png" alt="Errors_73.png" width="165" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_74.gif" alt="Errors_74.gif" width="1732" height="340" style="vertical-align:middle" />
+</p>
+
+<table class='Output'>
+ <tr>
+  <td style='text-align: left;'><span></span></td>
+  <td style='text-align: left;'><span>Estimate</span></td>
+  <td style='text-align: left;'><span>Standard Error</span></td>
+  <td style='text-align: left;'><span>t-Statistic</span></td>
+  <td style='text-align: left;'><span>P-Value</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>c</span></td>
+  <td style='text-align: left;'><span>1579.47</span></td>
+  <td style='text-align: left;'><span>161.87</span></td>
+  <td style='text-align: left;'><span>9.75766</span></td>
+  <td style='text-align: left;'><span>9.44153*10^^-7</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>e</span></td>
+  <td style='text-align: left;'><span>0.731514</span></td>
+  <td style='text-align: left;'><span>0.00548291</span></td>
+  <td style='text-align: left;'><span>133.417</span></td>
+  <td style='text-align: left;'><span>5.25234*10^^-19</span></td>
+ </tr>
+</table>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_75.gif" alt="Errors_75.gif" width="360" height="216" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_76.gif" alt="Errors_76.gif" width="1878" height="646" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_77.gif" alt="Errors_77.gif" width="360" height="210" style="vertical-align:middle" />
+</p>
+
+<table class='Output'>
+ <tr>
+  <td style='text-align: left;'><span></span></td>
+  <td style='text-align: left;'><span>Estimate</span></td>
+  <td style='text-align: left;'><span>Standard Error</span></td>
+  <td style='text-align: left;'><span>t-Statistic</span></td>
+  <td style='text-align: left;'><span>P-Value</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>c</span></td>
+  <td style='text-align: left;'><span>26.8607</span></td>
+  <td style='text-align: left;'><span>2.14141</span></td>
+  <td style='text-align: left;'><span>12.5435</span></td>
+  <td style='text-align: left;'><span>7.36882*10^^-8</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>e</span></td>
+  <td style='text-align: left;'><span>0.487564</span></td>
+  <td style='text-align: left;'><span>0.00436934</span></td>
+  <td style='text-align: left;'><span>111.587</span></td>
+  <td style='text-align: left;'><span>3.74399*10^^-18</span></td>
+ </tr>
+</table>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_78.png" alt="Errors_78.png" width="1145" height="798" style="vertical-align:middle" />
+</p>
+
+<table class='Output'>
+ <tr>
+  <td style='text-align: left;'><span></span></td>
+  <td style='text-align: left;'><span>Estimate</span></td>
+  <td style='text-align: left;'><span>Standard Error</span></td>
+  <td style='text-align: left;'><span>t-Statistic</span></td>
+  <td style='text-align: left;'><span>P-Value</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>c</span></td>
+  <td style='text-align: left;'><span>2.66069*10^^14</span></td>
+  <td style='text-align: left;'><span>2.10377*10^^-18</span></td>
+  <td style='text-align: left;'><span>1.26473*10^^32</span></td>
+  <td style='text-align: left;'><span>9.48601172255201.954589770191005*^-349</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>b</span></td>
+  <td style='text-align: left;'><span>-5.58435</span></td>
+  <td style='text-align: left;'><span>0.00315818</span></td>
+  <td style='text-align: left;'><span>-1768.22</span></td>
+  <td style='text-align: left;'><span>2.37762*10^^-31</span></td>
+ </tr>
+</table>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_79.png" alt="Errors_79.png" width="58" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_80.gif" alt="Graphics:Ge N-Doped Mobility vs. Temp" width="546" height="265" style="vertical-align:middle" />
+</p>
+
+<table class='Output'>
+ <tr>
+  <td style='text-align: left;'><span></span></td>
+  <td style='text-align: left;'><span>Estimate</span></td>
+  <td style='text-align: left;'><span>Standard Error</span></td>
+  <td style='text-align: left;'><span>t-Statistic</span></td>
+  <td style='text-align: left;'><span>P-Value</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>a</span></td>
+  <td style='text-align: left;'><span>2.00577</span></td>
+  <td style='text-align: left;'><span>0.256826</span></td>
+  <td style='text-align: left;'><span>7.80984</span></td>
+  <td style='text-align: left;'><span>0.0000145278</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>c</span></td>
+  <td style='text-align: left;'><span>118811.</span></td>
+  <td style='text-align: left;'><span>90718.2</span></td>
+  <td style='text-align: left;'><span>1.30967</span></td>
+  <td style='text-align: left;'><span>0.219595</span></td>
+ </tr>
+ <tr>
+  <td style='text-align: left;'><span>e</span></td>
+  <td style='text-align: left;'><span>5924.93</span></td>
+  <td style='text-align: left;'><span>262.593</span></td>
+  <td style='text-align: left;'><span>22.5632</span></td>
+  <td style='text-align: left;'><span>6.58215*10^^-10</span></td>
+ </tr>
+</table>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_81.png" alt="Errors_81.png" width="58" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_82.gif" alt="Graphics:Ge N-Doped Carrier Density vs. Temp" width="546" height="279" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_83.gif" alt="Graphics:Ge N-Doped Conductivity vs. Temp" width="546" height="287" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_84.png" alt="Errors_84.png" width="4" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_85.png" alt="Errors_85.png" width="4" height="36" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_86.gif" alt="Errors_86.gif" width="157" height="36" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_87.png" alt="Errors_87.png" width="58" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/Errors_88.png" alt="Errors_88.png" width="322" height="25" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="HTMLFiles/Errors_89.png" alt="Errors_89.png" width="69" height="16" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ 
