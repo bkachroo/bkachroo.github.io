@@ -1,0 +1,410 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14967,        402]
+NotebookOptionsPosition[     14043,        365]
+NotebookOutlinePosition[     14395,        381]
+CellTagsIndexPosition[     14352,        378]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Code Samples", "Title",
+ CellChangeTimes->{{3.6947328360703163`*^9, 3.6947328385488253`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Maps", "Chapter",
+ CellChangeTimes->{{3.6947331501409817`*^9, 3.694733150541019*^9}}],
+
+Cell[TextData[{
+ "Working through ideas for abstractions of computation and what is \
+theoretically possible given size limitations. Starting off with maps of \
+binary strings of length n to m as abstraction of algorithm. Since any data \
+structure (ex. trees) can be encoded into a string, this is pretty general. A \
+complete index requires length ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"m", "\[Cross]", 
+    SuperscriptBox["2", "n"]}], TraditionalForm]]],
+ ", and records the entire behaviour of the map, right in the name! Still, it \
+compresses the space of maps, ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["2", 
+    RowBox[{"m", "\[Cross]", 
+     SuperscriptBox["2", "n"]}]], TraditionalForm]]],
+ ", by ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["log", "2"], TraditionalForm]]],
+ ". There are ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["10", "19"], TraditionalForm]]],
+ " 3-3 maps. The question is: how many of those are unique? If there is not \
+huge degeneracy, we must be missing out on the computational behaviour \
+possible with little work, the space of unexplored algorithms.   A function \
+evaluating an arbitrary indexed map: (try 2-2, 256 possible)"
+}], "Text",
+ CellChangeTimes->{{3.69396803521496*^9, 3.693968098537208*^9}, {
+  3.693968175423437*^9, 3.693968180671193*^9}, {3.693968243527801*^9, 
+  3.693968276802009*^9}, {3.693968325505056*^9, 3.693968340831004*^9}, {
+  3.6939684401183*^9, 3.693968440670566*^9}, {3.694728142770883*^9, 
+  3.694728277500546*^9}, {3.694728324519561*^9, 3.694728367467416*^9}, {
+  3.694728434860014*^9, 3.694728755919635*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"mapGen", "[", 
+   RowBox[{"index_", ",", " ", "inLength_", ",", " ", "outLength_"}], "]"}], 
+  " ", ":=", " ", 
+  RowBox[{"Reverse", "[", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"PadLeft", "[", 
+      RowBox[{
+       RowBox[{"IntegerDigits", "[", 
+        RowBox[{"index", ",", " ", "2"}], "]"}], ",", 
+       RowBox[{"outLength", "*", 
+        RowBox[{"2", "^", "inLength"}]}]}], "]"}], " ", ",", " ", 
+     "inLength"}], "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.693968164253216*^9, 3.693968164740645*^9}, {
+   3.69396819919763*^9, 3.693968205117476*^9}, {3.6939684267754307`*^9, 
+   3.6939684439986677`*^9}, {3.6939686364547787`*^9, 3.693968639964978*^9}, {
+   3.6939686899493313`*^9, 3.69396871188426*^9}, {3.6939687759782352`*^9, 
+   3.693968823105411*^9}, {3.693968866692073*^9, 3.693968872730644*^9}, {
+   3.693968928608592*^9, 3.6939689588967733`*^9}, {3.6939694644563093`*^9, 
+   3.693969496471809*^9}, 3.694729260897653*^9}],
+
+Cell[TextData[{
+ "mapGen makes the lookup table for a particular map from the index. The \
+padding makes sure it works for smaller indices. Look up by selecting the \
+index of the list corresponding to the integer form of the input sequence. \
+Imagine: ",
+ StyleBox["put the right number into this function and it will give you the \
+solution to every traveling salesman problem of a certain size",
+  FontWeight->"Bold"],
+ ". Maps are at one extreme of the continuum between memory and processing. \
+No processing required except lookup, but also barely any compression. This \
+suggests a trade-off between compression and processing, as though processing \
+is just decompression. Below: first 3\[LineSeparator] 2-2 maps"
+}], "Text",
+ CellChangeTimes->{{3.693968829482209*^9, 3.693968860097912*^9}, {
+  3.693969010647847*^9, 3.6939690144082603`*^9}, {3.693969047335586*^9, 
+  3.693969113205894*^9}, {3.694728771287166*^9, 3.694728816215947*^9}, {
+  3.6947288751804953`*^9, 3.694728941085952*^9}, {3.694728973823427*^9, 
+  3.694728981447693*^9}, {3.694729208244752*^9, 3.694729238553233*^9}, {
+  3.694732966901782*^9, 3.694732969350268*^9}, {3.694733438532892*^9, 
+  3.694733438846212*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"map10", " ", "=", " ", 
+   RowBox[{"mapGen", "[", 
+    RowBox[{"0", ",", "2", ",", "2"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Grid", "[", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"ArrayPlot", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"PadLeft", "[", 
+        RowBox[{
+         RowBox[{"IntegerDigits", "[", 
+          RowBox[{"i", ",", " ", "2"}], "]"}], ",", " ", "2"}], "]"}], ",", 
+       " ", 
+       RowBox[{
+        RowBox[{"mapGen", "[", 
+         RowBox[{"j", ",", "2", ",", "2"}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{"i", "+", "1"}], "]"}], "]"}]}], "}"}], "]"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", " ", "0", ",", "2"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", " ", "0", ",", " ", "3"}], "}"}]}], " ", "]"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.693968963560795*^9, 3.693969001304636*^9}, {
+  3.693969268942423*^9, 3.6939693070860653`*^9}, {3.693969352339095*^9, 
+  3.6939694495934687`*^9}, {3.693969501599765*^9, 3.6939695843858643`*^9}, {
+  3.6939696343615017`*^9, 3.693969720352392*^9}, {3.693969753326676*^9, 
+  3.693969817045575*^9}, {3.693969875143447*^9, 3.6939698760215178`*^9}, {
+  3.693969939984396*^9, 3.693969945197576*^9}, {3.693969980114464*^9, 
+  3.693970036505332*^9}, {3.6947292356251183`*^9, 3.694729235697118*^9}, {
+  3.694732970918359*^9, 3.6947329711741867`*^9}, {3.694733434768178*^9, 
+  3.694733435421261*^9}, {3.694733474104134*^9, 3.6947334741900043`*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     GraphicsBox[RasterBox[{{1, 1}, {1, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {1, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}]},
+    {
+     GraphicsBox[RasterBox[{{1, 0}, {1, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {1, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}]},
+    {
+     GraphicsBox[RasterBox[{{0, 1}, {1, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {1, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 1}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> Automatic}], 
+     GraphicsBox[RasterBox[{{1, 1}, {0, 0}}, {{0, 0}, {2, 2}}, {0, 1}],
+      Frame->Automatic,
+      FrameLabel->{None, None},
+      FrameTicks->{{None, None}, {None, None}},
+      GridLinesStyle->Directive[
+        GrayLevel[0.5, 0.4]],
+      Method->{
+       "DefaultBoundaryStyle" -> Automatic, "DefaultPlotStyle" -> 
+        Automatic}]}
+   },
+   AutoDelete->False,
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{{3.693968973378428*^9, 3.6939690018242073`*^9}, 
+   3.693969307747164*^9, 3.693969417100371*^9, {3.6939695593959627`*^9, 
+   3.693969585212831*^9}, {3.693969637515336*^9, 3.6939697210553503`*^9}, {
+   3.6939697780601397`*^9, 3.6939698181291437`*^9}, 3.693969876794277*^9, {
+   3.6939699408529577`*^9, 3.693969945731515*^9}, {3.6939699844263372`*^9, 
+   3.693970037499577*^9}, {3.6947292472298*^9, 3.6947292644601793`*^9}, 
+   3.694732973958112*^9, {3.694733440994321*^9, 3.694733474929158*^9}}]
+}, Open  ]],
+
+Cell["\<\
+Next ideas: I haven\[CloseCurlyQuote]t even begun to explore composing maps, \
+or dynamics of repeated maps... so much is possible! Are there prime numbers \
+of maps, those which in composition give rise to others (specifically for n-n \
+maps)? Also there is the question of what is or isn\[CloseCurlyQuote]t \
+possible to compute given certain size restrictions (Turing Universality is \
+stupid if you need infinite memory).\
+\>", "Text",
+ CellChangeTimes->{{3.694729275538645*^9, 3.694729306354808*^9}, {
+  3.6947294069095697`*^9, 3.694729429710404*^9}, {3.694729480392239*^9, 
+  3.694729510573555*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Error-Propagation", "Chapter",
+ CellChangeTimes->{{3.694733142117806*^9, 3.694733146188819*^9}}],
+
+Cell[TextData[{
+ "The formula is: ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Delta]q", "\[LongEqual]", 
+    SqrtBox[
+     RowBox[{
+      UnderoverscriptBox["\[Sum]", "i", "n"], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["\[Delta]x", "i"], " ", 
+         FractionBox[
+          RowBox[{"\[PartialD]", "q"}], 
+          RowBox[{"\[PartialD]", 
+           SubscriptBox["x", "i"]}],
+          MultilineFunction->None]}], ")"}], "2"]}]]}], TraditionalForm]],
+  CellChangeTimes->{3.687822002134378*^9}],
+ ". Gaussian Propagation is not in the language for some reason. Takes a \
+function and its argument list (where you can set the variables\
+\[CloseCurlyQuote] errors with err[x]=). Useful for lab work."
+}], "Text",
+ CellChangeTimes->{{3.6947330805504923`*^9, 3.694733119988222*^9}, {
+  3.694733331769107*^9, 3.694733342473144*^9}, {3.6947333904848223`*^9, 
+  3.694733424508357*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"err", "[", 
+   RowBox[{"q_", ",", " ", "sig_"}], "]"}], " ", ":=", " ", 
+  RowBox[{
+   RowBox[{"Plus", "@@", 
+    RowBox[{"Map", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"err", "[", "#", "]"}], "*", 
+          RowBox[{"D", "[", 
+           RowBox[{
+            RowBox[{"q", "@@", "sig"}], ",", "#"}], "]"}]}], ")"}], "^", 
+        "2"}], "&"}], ",", "sig"}], "]"}]}], "//", "Sqrt"}]}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"f", "[", 
+   RowBox[{"x_", ",", " ", "y_"}], "]"}], " ", ":=", " ", 
+  RowBox[{
+   RowBox[{"x", "^", "2"}], "/", "y"}]}]], "Input",
+ CellChangeTimes->{{3.694733159116907*^9, 3.694733224744179*^9}, {
+  3.6947332942770653`*^9, 3.694733296572495*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"err", "[", 
+  RowBox[{"f", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"x", ",", " ", "y"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.69473322889844*^9, 3.6947332436708097`*^9}}],
+
+Cell[BoxData[
+ SqrtBox[
+  RowBox[{
+   FractionBox[
+    RowBox[{"4", " ", 
+     SuperscriptBox["x", "2"], " ", 
+     SuperscriptBox[
+      RowBox[{"err", "[", "x", "]"}], "2"]}], 
+    SuperscriptBox["y", "2"]], "+", 
+   FractionBox[
+    RowBox[{
+     SuperscriptBox["x", "4"], " ", 
+     SuperscriptBox[
+      RowBox[{"err", "[", "y", "]"}], "2"]}], 
+    SuperscriptBox["y", "4"]]}]]], "Output",
+ CellChangeTimes->{3.694733244836*^9, 3.694733298715241*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 651},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (July 28, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 99, 1, 92, "Title"],
+Cell[CellGroupData[{
+Cell[704, 27, 91, 1, 65, "Chapter"],
+Cell[798, 30, 1588, 35, 153, "Text"],
+Cell[2389, 67, 992, 21, 54, "Input"],
+Cell[3384, 90, 1189, 19, 144, "Text"],
+Cell[CellGroupData[{
+Cell[4598, 113, 1518, 35, 75, "Input"],
+Cell[6119, 150, 4717, 112, 601, "Output"]
+}, Open  ]],
+Cell[10851, 265, 615, 10, 87, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11503, 280, 102, 1, 65, "Chapter"],
+Cell[11608, 283, 920, 24, 76, "Text"],
+Cell[12531, 309, 498, 16, 32, "Input"],
+Cell[13032, 327, 283, 7, 32, "Input"],
+Cell[CellGroupData[{
+Cell[13340, 338, 205, 5, 32, "Input"],
+Cell[13548, 345, 455, 15, 69, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
